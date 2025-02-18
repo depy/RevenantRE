@@ -8,12 +8,13 @@ import (
 	"os"
 
 	"github.com/ebitenui/ebitenui"
-	euiimage "github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 var img *image.RGBA
+var scaleFactor = 4.0
+var slider *widget.Slider
 
 const (
 	screenWidth  = 1920
@@ -25,23 +26,6 @@ type Game struct {
 	ui    *ebitenui.UI
 }
 
-func (g *Game) Update() error {
-	g.ui.Update()
-	return nil
-}
-
-func (g *Game) Draw(screen *ebiten.Image) {
-	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Scale(4, 4)
-	i := ebiten.NewImageFromImage(g.image)
-	screen.DrawImage(i, op)
-	g.ui.Draw(screen)
-}
-
-func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
-	return screenWidth, screenHeight
-}
-
 func ReadBytes(file *os.File, n int) ([]byte, error) {
 	buf := make([]byte, n)
 	_, err := file.Read(buf)
@@ -51,39 +35,27 @@ func ReadBytes(file *os.File, n int) ([]byte, error) {
 	return buf, nil
 }
 
-func SetupUI() *ebitenui.UI {
-	rootContainer := widget.NewContainer(
-		// the container will use an anchor layout to layout its single child widget
-		widget.ContainerOpts.Layout(widget.NewAnchorLayout(
-			//Set how much padding before displaying content
-			widget.AnchorLayoutOpts.Padding(widget.NewInsetsSimple(30)),
-		)),
-	)
+func (g *Game) Update() error {
+	scaleFactor = float64(slider.Current)
+	g.ui.Update()
+	return nil
+}
 
-	innerContainer := widget.NewContainer(
-		widget.ContainerOpts.BackgroundImage(euiimage.NewNineSliceColor(color.NRGBA{32, 48, 64, 127})),
-		widget.ContainerOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(widget.AnchorLayoutData{
-				HorizontalPosition: widget.AnchorLayoutPositionEnd,
-				VerticalPosition:   widget.AnchorLayoutPositionEnd,
-				StretchHorizontal:  false,
-				StretchVertical:    true,
-			}),
-			widget.WidgetOpts.MinSize(600, 100),
-		),
-	)
-	rootContainer.AddChild(innerContainer)
+func (g *Game) Draw(screen *ebiten.Image) {
+	op := &ebiten.DrawImageOptions{}
+	op.GeoM.Scale(scaleFactor, scaleFactor)
+	i := ebiten.NewImageFromImage(g.image)
+	screen.DrawImage(i, op)
+	g.ui.Draw(screen)
+}
 
-	eui := &ebitenui.UI{
-		Container: rootContainer,
-	}
-
-	ebiten.SetWindowSize(screenWidth, screenHeight)
-	ebiten.SetWindowTitle("RevenantRE")
-	return eui
+func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
+	return screenWidth, screenHeight
 }
 
 func main() {
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\cavbones1.i2d")
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\dragonent.i2d")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Equip\\scroll.i2d")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d")
 	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\book.dat")
