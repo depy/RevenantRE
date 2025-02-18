@@ -137,7 +137,10 @@ func readImageryHeader(frh FileResourceHeader, file *os.File) (ImageryHeader, er
 }
 
 func readBitmaps(bitmapOffsets []uint32, file *os.File, bitmaps []Bitmap) ([]Bitmap, error) {
-	currPos, _ := file.Seek(0, io.SeekCurrent)
+	currPos, err := file.Seek(0, io.SeekCurrent)
+	if err != nil {
+		return nil, err
+	}
 
 	for i := range bitmapOffsets {
 		file.Seek(currPos, io.SeekStart)

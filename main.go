@@ -65,7 +65,12 @@ func main() {
 		log.Fatal(err)
 	}
 
-	fr, _ := NewFileResource(file)
+	fr, err := NewFileResource(file)
+	if err != nil {
+		log.Fatal(err)
+		return
+	}
+
 	bm := fr.Bitmaps[0]
 
 	img = image.NewRGBA(image.Rect(0, 0, int(bm.Width), int(bm.Height)))
