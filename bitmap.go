@@ -78,6 +78,18 @@ type Bitmap struct {
 	Data   []RGBA
 }
 
+type Palette struct {
+	colors []uint16
+}
+
+func NewPalette(data []byte) Palette {
+	p := Palette{}
+	for i := 0; i < len(data); i += 2 {
+		p.colors = append(p.colors, binary.LittleEndian.Uint16(data[i:i+2]))
+	}
+	return p
+}
+
 func NewBitmapFlags(flags uint32) BitmapFlags {
 	return BitmapFlags{
 		Is8bit:        flags&uint32(BM_8BIT) != 0,
@@ -172,7 +184,7 @@ func NewBitmap(file *os.File) (Bitmap, error) {
 	}
 
 	bmHeader := NewBitmapHeader(bmhData)
-	//PrintBitmapHeader(&bmHeader)
+	PrintBitmapHeader(&bmHeader)
 
 	bmFlags := NewBitmapFlags(bmHeader.Flags)
 	PrintBitmapFlags(&bmFlags)
@@ -183,13 +195,23 @@ func NewBitmap(file *os.File) (Bitmap, error) {
 		return Bitmap{}, err
 	}
 
+	palette := Palette{}
+
 	rgbData := []RGBA{}
 	if bmFlags.Is15bit {
-		fmt.Println("Rendering 15bit bitmap")
+		//fmt.Println("Rendering 15bit bitmap")
+		//Convert15to16();
 		rgbData = RenderBitmap15bit(bmHeader, bmapData)
 	} else if bmFlags.Is8bit {
-		fmt.Println("Rendering 8bit bitmap")
-		rgbData = RenderBitmap8bit(bmHeader, bmapData)
+		//fmt.Println("Rendering 8bit bitmap")
+		//ConvertPal15to16();
+		paletteData, err := ReadBytes(file, 512)
+		palette = NewPalette(paletteData)
+		if err != nil {
+			fmt.Println("Error reading palette data")
+			return Bitmap{}, err
+		}
+		rgbData = RenderBitmap8bit(bmHeader, bmapData, palette)
 	}
 
 	return Bitmap{bmHeader.Width, bmHeader.Height, bmHeader, rgbData}, nil
@@ -216,16 +238,17 @@ func RenderBitmap15bit(bmh BitmapHeader, data []byte) []RGBA {
 	return result
 }
 
-func RenderBitmap8bit(bmh BitmapHeader, data []byte) []RGBA {
+func RenderBitmap8bit(bmh BitmapHeader, data []byte, palette Palette) []RGBA {
 	result := make([]RGBA, bmh.Width*bmh.Height)
 	for i := range bmh.Height {
 		for j := range bmh.Width {
 			d := data[i*bmh.Width+j]
+			c := palette.colors[d]
 
-			pR := uint8(d)
-			pG := uint8(d)
-			pB := uint8(d)
-			pA := uint8(d)
+			pR := uint8((c>>10)&0x1F) * 8
+			pG := uint8((c>>5)&0x1F) * 8
+			pB := uint8(c&0x1F) * 8
+			pA := uint8(255)
 
 			result[i*bmh.Width+j] = RGBA{pR, pG, pB, pA}
 		}

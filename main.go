@@ -57,8 +57,8 @@ func main() {
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\dragonent.i2d")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Equip\\scroll.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d")
-	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\book.dat")
+	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d")
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\book.dat")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\inventory.dat")
 
 	if err != nil {
