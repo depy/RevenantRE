@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/binary"
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -11,6 +12,7 @@ const FileResourceHeaderSize = 20
 type FileResource struct {
 	Header      FileResourceHeader
 	BitmapTable []uint32
+	Bitmaps     []Bitmap
 }
 
 type FileResourceHeader struct {
@@ -84,34 +86,83 @@ func NewImageryHeader(data []byte) ImageryHeader {
 }
 
 func NewFileResource(file *os.File) (FileResource, error) {
+	frh, err := readFileResourceHeader(file)
+	if err != nil {
+		fmt.Println("Error reading file resource header")
+	}
+
+	imageryHeader, err := readImageryHeader(frh, file)
+	if err != nil {
+		fmt.Println("Error reading file resource header")
+	}
+
+	frh.ImgryHeader = imageryHeader
+
+	bitmapOffsets := []uint32{}
+	bitmapOffsets, err = readBitmapOffsets(frh, file, bitmapOffsets)
+
+	if err != nil {
+		fmt.Println("Error reading bitmap offsets")
+	}
+
+	bitmaps := []Bitmap{}
+	bitmaps, err = readBitmaps(bitmapOffsets, file, bitmaps)
+	if err != nil {
+		fmt.Println("Error reading bitmaps")
+	}
+
+	return FileResource{Header: frh, BitmapTable: bitmapOffsets, Bitmaps: bitmaps}, nil
+}
+
+func readFileResourceHeader(file *os.File) (FileResourceHeader, error) {
 	fileResHdrData, err := ReadBytes(file, 20)
 	if err != nil {
-		fmt.Println("Error reading resource header")
-		return FileResource{}, err
+		return FileResourceHeader{}, err
 	}
 
 	frh := NewFileResourceHeader(fileResHdrData)
+	return frh, nil
+}
 
+func readImageryHeader(frh FileResourceHeader, file *os.File) (ImageryHeader, error) {
 	if frh.HeaderSize > 0 {
 		imageryHdr, err := ReadBytes(file, int(frh.HeaderSize))
 		if err != nil {
-			fmt.Println("Error reading imagery header")
-			return FileResource{}, err
+			return ImageryHeader{}, err
 		}
 
-		frh.ImgryHeader = NewImageryHeader(imageryHdr)
+		return NewImageryHeader(imageryHdr), nil
 	}
+	return ImageryHeader{}, nil
+}
 
-	bitmapOffsets := []uint32{}
+func readBitmaps(bitmapOffsets []uint32, file *os.File, bitmaps []Bitmap) ([]Bitmap, error) {
+	currPos, _ := file.Seek(0, io.SeekCurrent)
+
+	for i := range bitmapOffsets {
+		file.Seek(currPos, io.SeekStart)
+		bmOfs := int64(bitmapOffsets[i])
+		file.Seek(bmOfs, io.SeekCurrent)
+
+		bm, err := NewBitmap(file)
+		if err != nil {
+			return nil, err
+		}
+		bitmaps = append(bitmaps, bm)
+	}
+	return bitmaps, nil
+}
+
+func readBitmapOffsets(frh FileResourceHeader, file *os.File, bitmapOffsets []uint32) ([]uint32, error) {
 	if frh.Topbm > 0 {
 		for range frh.Topbm {
 			offset, err := ReadBytes(file, 4)
 			if err != nil {
-				fmt.Println("Error reading bitmap offset")
-
+				return nil, err
 			}
-			bitmapOffsets = append(bitmapOffsets, binary.LittleEndian.Uint32(offset))
+			ofs := binary.LittleEndian.Uint32(offset)
+			bitmapOffsets = append(bitmapOffsets, ofs)
 		}
 	}
-	return FileResource{Header: frh, BitmapTable: bitmapOffsets}, nil
+	return bitmapOffsets, nil
 }

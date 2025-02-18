@@ -100,7 +100,7 @@ func NewBitmapFlags(flags uint32) BitmapFlags {
 
 func PrintBitmapFlags(flags BitmapFlags) {
 	fmt.Println("----- Bitmap Flags -----")
-	fmt.Println("Is8bit:\t", flags.Is8bit)
+	fmt.Println("Is8bit:\t\t", flags.Is8bit)
 	fmt.Println("Is16bit:\t", flags.Is16bit)
 	fmt.Println("Is15bit:\t", flags.Is15bit)
 	fmt.Println("Is24bit:\t", flags.Is24bit)
