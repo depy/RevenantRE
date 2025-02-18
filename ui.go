@@ -54,48 +54,7 @@ func SetupUI() *ebitenui.UI {
 				HorizontalPosition: widget.GridLayoutPositionEnd,
 				VerticalPosition:   widget.GridLayoutPositionStart,
 			}),
-			widget.WidgetOpts.MinSize(280, 25),
-		),
-
-		widget.SliderOpts.Images(
-			// Set the track images
-			&widget.SliderTrackImage{
-				Idle:  euiimage.NewNineSliceColor(color.NRGBA{100, 100, 100, 255}),
-				Hover: euiimage.NewNineSliceColor(color.NRGBA{100, 100, 100, 255}),
-			},
-			// Set the handle images
-			&widget.ButtonImage{
-				Idle:    euiimage.NewNineSliceColor(color.NRGBA{255, 100, 100, 255}),
-				Hover:   euiimage.NewNineSliceColor(color.NRGBA{255, 100, 100, 255}),
-				Pressed: euiimage.NewNineSliceColor(color.NRGBA{255, 100, 100, 255}),
-			},
-		),
-		// Set the size of the handle
-		widget.SliderOpts.FixedHandleSize(6),
-		// Set the offset to display the track
-		widget.SliderOpts.TrackOffset(0),
-		// Set the size to move the handle
-		widget.SliderOpts.PageSizeFunc(func() int {
-			return 1
-		}),
-		// Set the callback to call when the slider value is changed
-		widget.SliderOpts.ChangedHandler(func(args *widget.SliderChangedEventArgs) {
-			// fmt.Println(args.Current, "dragging", args.Dragging)
-		}),
-	)
-
-	slider2 := widget.NewSlider(
-		// Set the slider orientation - n/s vs e/w
-		widget.SliderOpts.Direction(widget.DirectionHorizontal),
-		// Set the minimum and maximum value for the slider
-		widget.SliderOpts.MinMax(1, 12),
-
-		widget.SliderOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(widget.GridLayoutData{
-				HorizontalPosition: widget.GridLayoutPositionEnd,
-				VerticalPosition:   widget.GridLayoutPositionStart,
-			}),
-			widget.WidgetOpts.MinSize(280, 25),
+			widget.WidgetOpts.MinSize(270, 25),
 		),
 
 		widget.SliderOpts.Images(
@@ -146,19 +105,7 @@ func SetupUI() *ebitenui.UI {
 		),
 	)
 
-	sliderLabel2 := widget.NewText(
-		widget.TextOpts.Text("Hello World!", fontFace, color.White),
-		widget.TextOpts.WidgetOpts(
-			widget.WidgetOpts.LayoutData(widget.GridLayoutData{
-				HorizontalPosition: widget.GridLayoutPositionEnd,
-				VerticalPosition:   widget.GridLayoutPositionStart,
-			}),
-			widget.WidgetOpts.MinSize(280, 25),
-		),
-	)
-
-	rightSidePanel.AddChild(sliderLabel, slider, sliderLabel2, slider2)
-
+	rightSidePanel.AddChild(sliderLabel, slider)
 	rootContainer.AddChild(rightSidePanel)
 
 	eui := &ebitenui.UI{

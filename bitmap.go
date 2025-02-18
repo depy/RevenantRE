@@ -98,7 +98,7 @@ func NewBitmapFlags(flags uint32) BitmapFlags {
 	}
 }
 
-func PrintBitmapFlags(flags BitmapFlags) {
+func PrintBitmapFlags(flags *BitmapFlags) {
 	fmt.Println("----- Bitmap Flags -----")
 	fmt.Println("Is8bit:\t\t", flags.Is8bit)
 	fmt.Println("Is16bit:\t", flags.Is16bit)
@@ -172,8 +172,10 @@ func NewBitmap(file *os.File) (Bitmap, error) {
 	}
 
 	bmHeader := NewBitmapHeader(bmhData)
+	//PrintBitmapHeader(&bmHeader)
+
 	bmFlags := NewBitmapFlags(bmHeader.Flags)
-	PrintBitmapFlags(bmFlags)
+	PrintBitmapFlags(&bmFlags)
 
 	bmapData, err := ReadBytes(file, int(bmHeader.DataSize))
 	if err != nil {
