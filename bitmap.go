@@ -25,6 +25,24 @@ const (
 	BM_CHUNKED    uint32 = 0x8000 // Bitmap is chunked out
 )
 
+type BitmapFlags struct {
+	Is8bit        bool
+	Is15bit       bool
+	Is16bit       bool
+	Is24bit       bool
+	Is32bit       bool
+	HasZBuffer    bool
+	HasNormals    bool
+	HasAlias      bool
+	HasAlpha      bool
+	HasPalette    bool
+	HasRegPoint   bool
+	NoBitmap      bool
+	Is5bitPalette bool
+	IsCompressed  bool
+	IsChunked     bool
+}
+
 type RGBA struct {
 	R uint8
 	G uint8
@@ -56,12 +74,52 @@ type BitmapHeader struct {
 type Bitmap struct {
 	Width  uint32
 	Height uint32
-	Header *BitmapHeader
+	Header BitmapHeader
 	Data   []RGBA
 }
 
-func NewBitmapHeader(data []byte) *BitmapHeader {
-	return &BitmapHeader{
+func NewBitmapFlags(flags uint32) BitmapFlags {
+	return BitmapFlags{
+		Is8bit:        flags&uint32(BM_8BIT) != 0,
+		Is15bit:       flags&uint32(BM_15BIT) != 0,
+		Is16bit:       flags&uint32(BM_16BIT) != 0,
+		Is24bit:       flags&uint32(BM_24BIT) != 0,
+		Is32bit:       flags&uint32(BM_32BIT) != 0,
+		HasZBuffer:    flags&uint32(BM_ZBUFFER) != 0,
+		HasNormals:    flags&uint32(BM_NORMALS) != 0,
+		HasAlias:      flags&uint32(BM_ALIAS) != 0,
+		HasAlpha:      flags&uint32(BM_ALPHA) != 0,
+		HasPalette:    flags&uint32(BM_PALETTE) != 0,
+		HasRegPoint:   flags&uint32(BM_REGPOINT) != 0,
+		NoBitmap:      flags&uint32(BM_NOBITMAP) != 0,
+		Is5bitPalette: flags&uint32(BM_5BITPAL) != 0,
+		IsCompressed:  flags&uint32(BM_COMPRESSED) != 0,
+		IsChunked:     flags&uint32(BM_CHUNKED) != 0,
+	}
+}
+
+func PrintBitmapFlags(flags BitmapFlags) {
+	fmt.Println("----- Bitmap Flags -----")
+	fmt.Println("Is8bit:\t", flags.Is8bit)
+	fmt.Println("Is16bit:\t", flags.Is16bit)
+	fmt.Println("Is15bit:\t", flags.Is15bit)
+	fmt.Println("Is24bit:\t", flags.Is24bit)
+	fmt.Println("Is32bit:\t", flags.Is32bit)
+	fmt.Println("HasZBuffer:\t", flags.HasZBuffer)
+	fmt.Println("HasNormals:\t", flags.HasNormals)
+	fmt.Println("HasAlias:\t", flags.HasAlias)
+	fmt.Println("HasAlpha:\t", flags.HasAlpha)
+	fmt.Println("HasPalette:\t", flags.HasPalette)
+	fmt.Println("HasRegPoint:\t", flags.HasRegPoint)
+	fmt.Println("NoBitmap:\t", flags.NoBitmap)
+	fmt.Println("Is5bitPalette:\t", flags.Is5bitPalette)
+	fmt.Println("IsCompressed:\t", flags.IsCompressed)
+	fmt.Println("IsChunked:\t", flags.IsChunked)
+	fmt.Println("------------------------\n")
+}
+
+func NewBitmapHeader(data []byte) BitmapHeader {
+	return BitmapHeader{
 		Width:         binary.LittleEndian.Uint32(data[0:4]),
 		Height:        binary.LittleEndian.Uint32(data[4:8]),
 		RegPointX:     binary.LittleEndian.Uint32(data[8:12]),
@@ -83,6 +141,29 @@ func NewBitmapHeader(data []byte) *BitmapHeader {
 	}
 }
 
+func PrintBitmapHeader(bmh *BitmapHeader) {
+	fmt.Println("------ Bitmap Header -----")
+	fmt.Println("Width:\t", bmh.Width)
+	fmt.Println("Height:\t", bmh.Height)
+	fmt.Println("RegPointX:\t", bmh.RegPointX)
+	fmt.Println("RegPointY:\t", bmh.RegPointY)
+	fmt.Println("Flags:\t", bmh.Flags)
+	fmt.Println("DrawingMode:\t", bmh.DrawingMode)
+	fmt.Println("KeyColor:\t", bmh.KeyColor)
+	fmt.Println("AliasSize:\t", bmh.AliasSize)
+	fmt.Println("AliasOffset:\t", bmh.AliasOffset)
+	fmt.Println("AlphaSize:\t", bmh.AlphaSize)
+	fmt.Println("Alpha:\t", bmh.Alpha)
+	fmt.Println("ZBufferSize:\t", bmh.ZBufferSize)
+	fmt.Println("ZBuffer:\t", bmh.ZBuffer)
+	fmt.Println("NormalSize:\t", bmh.NormalSize)
+	fmt.Println("Normal:\t", bmh.Normal)
+	fmt.Println("PaletteSize:\t", bmh.PaletteSize)
+	fmt.Println("PaletteOffset:\t", bmh.PaletteOffset)
+	fmt.Println("DataSize:\t", bmh.DataSize)
+	fmt.Println("------------------------\n")
+}
+
 func NewBitmap(file *os.File) (Bitmap, error) {
 	bmhData, err := ReadBytes(file, 72) // Seems like the header is 72 bytes when there's no chunking header following
 	if err != nil {
@@ -91,6 +172,8 @@ func NewBitmap(file *os.File) (Bitmap, error) {
 	}
 
 	bmHeader := NewBitmapHeader(bmhData)
+	bmFlags := NewBitmapFlags(bmHeader.Flags)
+	PrintBitmapFlags(bmFlags)
 
 	bmapData, err := ReadBytes(file, int(bmHeader.DataSize))
 	if err != nil {
@@ -99,17 +182,17 @@ func NewBitmap(file *os.File) (Bitmap, error) {
 	}
 
 	rgbData := RenderBitmap(bmHeader, bmapData)
+
 	return Bitmap{bmHeader.Width, bmHeader.Height, bmHeader, rgbData}, nil
 }
 
-func RenderBitmap(bmh *BitmapHeader, data []byte) []RGBA {
+func RenderBitmap(bmh BitmapHeader, data []byte) []RGBA {
 	result := make([]RGBA, bmh.Width*bmh.Height)
 	if bmh.Flags&uint32(BM_15BIT) != 0 {
 		for i := range bmh.Height {
 			for j := range bmh.Width {
 				d := data[i*bmh.Width*2+j*2 : i*bmh.Width*2+j*2+2]
 
-				//fmt.Println(hex.Dump(d))
 				pixelData := binary.LittleEndian.Uint16(d)
 				convPixelData := pixelData
 				pR := uint8((convPixelData&0b0111110000000000)>>10) << 3

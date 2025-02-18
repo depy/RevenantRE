@@ -21,7 +21,7 @@ type FileResourceHeader struct {
 	DataSize    uint32
 	ObjSize     uint32
 	HeaderSize  uint32
-	ImgryHeader *ImageryHeader
+	ImgryHeader ImageryHeader
 }
 
 type ImageryHeader struct {
@@ -66,8 +66,8 @@ func NewFileResourceHeader(data []byte) FileResourceHeader {
 	}
 }
 
-func NewImageryHeader(data []byte) *ImageryHeader {
-	ih := &ImageryHeader{
+func NewImageryHeader(data []byte) ImageryHeader {
+	ih := ImageryHeader{
 		ImageryId: binary.LittleEndian.Uint32(data[0:4]),
 		NumStates: binary.LittleEndian.Uint32(data[4:8]),
 	}

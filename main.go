@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"image"
 	"image/color"
 	"log"
@@ -54,11 +53,12 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\cavbones1.i2d")
+	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\cavbones1.i2d")
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\dragonent.i2d")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Equip\\scroll.i2d")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d")
-	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\book.dat")
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\book.dat")
 	// file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\inventory.dat")
 
 	if err != nil {
@@ -69,7 +69,7 @@ func main() {
 
 	file.Seek(int64(fr.BitmapTable[0]), 1)
 	bm, _ := NewBitmap(file)
-	fmt.Println(bm.Height, bm.Width)
+	PrintBitmapHeader(&bm.Header)
 
 	img = image.NewRGBA(image.Rect(0, 0, int(bm.Width), int(bm.Height)))
 	for i := 0; i < len(bm.Data); i++ {
