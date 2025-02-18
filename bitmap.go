@@ -181,28 +181,53 @@ func NewBitmap(file *os.File) (Bitmap, error) {
 		return Bitmap{}, err
 	}
 
-	rgbData := RenderBitmap(bmHeader, bmapData)
+	rgbData := []RGBA{}
+	if bmFlags.Is15bit {
+		fmt.Println("Rendering 15bit bitmap")
+		rgbData = RenderBitmap15bit(bmHeader, bmapData)
+	} else if bmFlags.Is8bit {
+		fmt.Println("Rendering 8bit bitmap")
+		rgbData = RenderBitmap8bit(bmHeader, bmapData)
+	}
 
 	return Bitmap{bmHeader.Width, bmHeader.Height, bmHeader, rgbData}, nil
 }
 
-func RenderBitmap(bmh BitmapHeader, data []byte) []RGBA {
+func RenderBitmap15bit(bmh BitmapHeader, data []byte) []RGBA {
 	result := make([]RGBA, bmh.Width*bmh.Height)
-	if bmh.Flags&uint32(BM_15BIT) != 0 {
-		for i := range bmh.Height {
-			for j := range bmh.Width {
-				d := data[i*bmh.Width*2+j*2 : i*bmh.Width*2+j*2+2]
 
-				pixelData := binary.LittleEndian.Uint16(d)
-				convPixelData := pixelData
-				pR := uint8((convPixelData&0b0111110000000000)>>10) << 3
-				pG := uint8((convPixelData&0b0000001111100000)>>5) << 3
-				pB := uint8((convPixelData & 0b0000000000011111)) << 3
-				pA := uint8(convPixelData & 0b1000000000000000)
+	for i := range bmh.Height {
+		for j := range bmh.Width {
+			d := data[i*bmh.Width*2+j*2 : i*bmh.Width*2+j*2+2]
 
-				result[i*bmh.Width+j] = RGBA{pR, pG, pB, pA}
-			}
+			pixelData := binary.LittleEndian.Uint16(d)
+			convPixelData := pixelData
+			pR := uint8((convPixelData&0b0111110000000000)>>10) << 3
+			pG := uint8((convPixelData&0b0000001111100000)>>5) << 3
+			pB := uint8((convPixelData & 0b0000000000011111)) << 3
+			pA := uint8(convPixelData & 0b1000000000000000)
+
+			result[i*bmh.Width+j] = RGBA{pR, pG, pB, pA}
 		}
+
+	}
+	return result
+}
+
+func RenderBitmap8bit(bmh BitmapHeader, data []byte) []RGBA {
+	result := make([]RGBA, bmh.Width*bmh.Height)
+	for i := range bmh.Height {
+		for j := range bmh.Width {
+			d := data[i*bmh.Width+j]
+
+			pR := uint8(d)
+			pG := uint8(d)
+			pB := uint8(d)
+			pA := uint8(d)
+
+			result[i*bmh.Width+j] = RGBA{pR, pG, pB, pA}
+		}
+
 	}
 	return result
 }
