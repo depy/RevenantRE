@@ -1,0 +1,356 @@
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\Forest\forvinecol.i2d  -----
+----- Bitmap Flags -----
+Is8bit:          true
+Is16bit:         false
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    true
+IsChunked:       true
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\Town\twnlight.i2d  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         false
+Is15bit:         true
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     true
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\resources\SpellIcons.dat  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         true
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        true
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\resources\automap.dat  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         false
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     true
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\resources\editor.dat  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         false
+Is15bit:         true
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        true
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     true
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\Equip\AoRogoss.I2D  -----
+----- Bitmap Flags -----
+Is8bit:          true
+Is16bit:         false
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\Misc\shadow_bane.i2d  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         false
+Is15bit:         true
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        true
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\resources\automap.dat  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         false
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\resources\editor.dat  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         false
+Is15bit:         true
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      true
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     true
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\resources\popupalpha.dat  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         false
+Is15bit:         true
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        true
+HasPalette:      false
+HasRegPoint:     true
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\Cave\cavworm1.i2d  -----
+----- Bitmap Flags -----
+Is8bit:          true
+Is16bit:         false
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      true
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     true
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    true
+IsChunked:       true
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\resources\dlgfont.dat  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         false
+Is15bit:         true
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        true
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\Cave\CavBigGeode.I2D  -----
+----- Bitmap Flags -----
+Is8bit:          true
+Is16bit:         false
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      true
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    true
+IsChunked:       true
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\Cave\cavbones2.i2d  -----
+----- Bitmap Flags -----
+Is8bit:          true
+Is16bit:         false
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      true
+HasNormals:      true
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\Misc\blood.i2d  -----
+----- Bitmap Flags -----
+Is8bit:          false
+Is16bit:         false
+Is15bit:         true
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    false
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\Misc\pb.i2d  -----
+----- Bitmap Flags -----
+Is8bit:          true
+Is16bit:         false
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      false
+HasNormals:      false
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     false
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    true
+IsChunked:       false
+------------------------
+
+----------------------------------------
+
+-----  D:\Games\RevenantRE\__1extracted\imagery\Imagery\TownInt\tincandle.i2d  -----
+----- Bitmap Flags -----
+Is8bit:          true
+Is16bit:         false
+Is15bit:         false
+Is24bit:         false
+Is32bit:         false
+HasZBuffer:      true
+HasNormals:      true
+HasAlias:        false
+HasAlpha:        false
+HasPalette:      false
+HasRegPoint:     true
+NoBitmap:        false
+Is5bitPalette:   false
+IsCompressed:    true
+IsChunked:       true
+------------------------
+
+----------------------------------------

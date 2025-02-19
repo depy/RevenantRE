@@ -6,6 +6,8 @@ import (
 	"log"
 	"os"
 
+	"github.com/depy/RevenantRE/graphics"
+	"github.com/depy/RevenantRE/ui"
 	"github.com/ebitenui/ebitenui"
 	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -25,17 +27,8 @@ type Game struct {
 	ui    *ebitenui.UI
 }
 
-func ReadBytes(file *os.File, n int) ([]byte, error) {
-	buf := make([]byte, n)
-	_, err := file.Read(buf)
-	if err != nil {
-		return nil, err
-	}
-	return buf, nil
-}
-
 func (g *Game) Update() error {
-	scaleFactor = float64(slider.Current)
+	scaleFactor = 2
 	g.ui.Update()
 	return nil
 }
@@ -53,19 +46,25 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\cavbones1.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\dragonent.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Equip\\scroll.i2d")
-	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\book.dat")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\inventory.dat")
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\cavbones1.i2d") // 8bit, zbuffer, compressed, chunked
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d") // 8bit, zbuffer, compressed, chunked
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\dragonent.i2d") // 8bit, zbuffer, compressed, chunked
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\formushrooms2.i2d") // 8bit, zbuffer, compressed, chunked
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\KeepInt\\kinrug.i2d") // 8bit, zbuffer, compressed, chunked
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\book.dat") // Works
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\scroll.dat") // Works
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Equip\\scroll.i2d") // Works
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\book.i2d") // Works
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Magic\\death.i2d") // Works
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\cheese.i2d") // Works
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\potionblue.i2d") // Works
+	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d") // Works
 
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	fr, err := NewFileResource(file)
+	fr, err := graphics.NewFileResource(file, false)
 	if err != nil {
 		log.Fatal(err)
 		return
@@ -81,7 +80,7 @@ func main() {
 		img.Set(x, y, c)
 	}
 
-	eui := SetupUI()
+	eui := ui.SetupUI(screenWidth, screenHeight)
 	g := &Game{
 		image: img,
 		ui:    eui,
