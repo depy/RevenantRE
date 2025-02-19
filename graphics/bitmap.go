@@ -74,20 +74,25 @@ type BitmapHeader struct {
 }
 
 type Bitmap struct {
-	Width  uint32
-	Height uint32
-	Header BitmapHeader
-	Data   []RGBA
+	Width   uint32
+	Height  uint32
+	Header  BitmapHeader
+	Palette Palette
+	Data    []RGBA
 }
 
 type Palette struct {
-	colors []uint16
+	Colors []RGBA
 }
 
 func NewPalette(data []byte) Palette {
 	p := Palette{}
 	for i := 0; i < len(data); i += 2 {
-		p.colors = append(p.colors, binary.LittleEndian.Uint16(data[i:i+2]))
+		c := binary.LittleEndian.Uint16(data[i : i+2])
+		pR := uint8((c>>10)&0x1F) * 8
+		pG := uint8((c>>5)&0x1F) * 8
+		pB := uint8(c&0x1F) * 8
+		p.Colors = append(p.Colors, RGBA{pR, pG, pB, 255})
 	}
 	return p
 }
@@ -192,6 +197,7 @@ func NewBitmap(file *os.File, readOnlyHeaders bool) (Bitmap, error) {
 	//PrintBitmapFlags(&bmFlags)
 
 	rgbData := []RGBA{}
+	palette := Palette{}
 
 	if !readOnlyHeaders {
 		bmapData, err := utils.ReadBytes(file, int(bmHeader.DataSize))
@@ -206,7 +212,7 @@ func NewBitmap(file *os.File, readOnlyHeaders bool) (Bitmap, error) {
 		} else if bmFlags.Is8bit {
 			//fmt.Println("Rendering 8bit bitmap")
 			paletteData, err := utils.ReadBytes(file, 512)
-			palette := NewPalette(paletteData)
+			palette = NewPalette(paletteData)
 			if err != nil {
 				fmt.Println("Error reading palette data for: ", file.Name())
 				return Bitmap{}, err
@@ -215,7 +221,7 @@ func NewBitmap(file *os.File, readOnlyHeaders bool) (Bitmap, error) {
 		}
 	}
 
-	return Bitmap{bmHeader.Width, bmHeader.Height, bmHeader, rgbData}, nil
+	return Bitmap{bmHeader.Width, bmHeader.Height, bmHeader, palette, rgbData}, nil
 }
 
 func RenderBitmap15bit(bmh BitmapHeader, data []byte) []RGBA {
@@ -244,14 +250,8 @@ func RenderBitmap8bit(bmh BitmapHeader, data []byte, palette Palette) []RGBA {
 	for i := range bmh.Height {
 		for j := range bmh.Width {
 			d := data[i*bmh.Width+j]
-			c := palette.colors[d]
-
-			pR := uint8((c>>10)&0x1F) * 8
-			pG := uint8((c>>5)&0x1F) * 8
-			pB := uint8(c&0x1F) * 8
-			pA := uint8(255)
-
-			result[i*bmh.Width+j] = RGBA{pR, pG, pB, pA}
+			c := palette.Colors[d]
+			result[i*bmh.Width+j] = RGBA{c.R, c.G, c.B, c.A}
 		}
 	}
 	return result

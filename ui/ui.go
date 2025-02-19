@@ -18,7 +18,7 @@ func SetupUI(screenWidth int, screenHeight int) *ebitenui.UI {
 		// the container will use an anchor layout to layout its single child widget
 		widget.ContainerOpts.Layout(widget.NewAnchorLayout(
 			//Set how much padding before displaying content
-			widget.AnchorLayoutOpts.Padding(widget.NewInsetsSimple(30)),
+			widget.AnchorLayoutOpts.Padding(widget.NewInsetsSimple(20)),
 		)),
 	)
 

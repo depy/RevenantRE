@@ -14,6 +14,7 @@ import (
 )
 
 var img *image.RGBA
+var palette *image.RGBA
 var scaleFactor = 4.0
 var slider *widget.Slider
 
@@ -38,6 +39,11 @@ func (g *Game) Draw(screen *ebiten.Image) {
 	op.GeoM.Scale(scaleFactor, scaleFactor)
 	i := ebiten.NewImageFromImage(g.image)
 	screen.DrawImage(i, op)
+
+	op.GeoM.Scale(12, 12)
+	op.GeoM.Translate(900, 20)
+	p := ebiten.NewImageFromImage(palette)
+	screen.DrawImage(p, op)
 	g.ui.Draw(screen)
 }
 
@@ -78,6 +84,14 @@ func main() {
 		y := i / int(bm.Width)
 		c := color.RGBA{bm.Data[i].R, bm.Data[i].G, bm.Data[i].B, bm.Data[i].A}
 		img.Set(x, y, c)
+	}
+
+	palette = image.NewRGBA(image.Rect(0, 0, 16, 16))
+	for i := 0; i < len(bm.Palette.Colors); i++ {
+		x := i % 16
+		y := i / 16
+		c := bm.Palette.Colors[i]
+		palette.Set(x, y, color.RGBA{c.R, c.G, c.B, c.A})
 	}
 
 	eui := ui.SetupUI(screenWidth, screenHeight)
