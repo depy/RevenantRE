@@ -191,10 +191,10 @@ func NewBitmap(file *os.File, readOnlyHeaders bool) (Bitmap, error) {
 	}
 
 	bmHeader := NewBitmapHeader(bmhData)
-	//PrintBitmapHeader(&bmHeader)
+	PrintBitmapHeader(&bmHeader)
 
 	bmFlags := NewBitmapFlags(bmHeader.Flags)
-	//PrintBitmapFlags(&bmFlags)
+	PrintBitmapFlags(&bmFlags)
 
 	rgbData := []RGBA{}
 	palette := Palette{}
@@ -217,7 +217,12 @@ func NewBitmap(file *os.File, readOnlyHeaders bool) (Bitmap, error) {
 				fmt.Println("Error reading palette data for: ", file.Name())
 				return Bitmap{}, err
 			}
-			rgbData = RenderBitmap8bit(bmHeader, bmapData, palette)
+			if bmFlags.IsChunked {
+				ch := NewChunksHeader(bmapData)
+				fmt.Println(ch)
+			} else {
+				rgbData = RenderBitmap8bit(bmHeader, bmapData, palette)
+			}
 		}
 	}
 

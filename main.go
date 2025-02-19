@@ -53,9 +53,7 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 
 func main() {
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\cavbones1.i2d") // 8bit, zbuffer, compressed, chunked
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d") // 8bit, zbuffer, compressed, chunked
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\dragonent.i2d") // 8bit, zbuffer, compressed, chunked
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\formushrooms2.i2d") // 8bit, zbuffer, compressed, chunked
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\KeepInt\\kinrug.i2d") // 8bit, zbuffer, compressed, chunked
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\book.dat") // Works
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\scroll.dat") // Works
@@ -64,7 +62,9 @@ func main() {
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Magic\\death.i2d") // Works
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\cheese.i2d") // Works
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\potionblue.i2d") // Works
-	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d") // Works
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d") // Works
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\formushrooms2.i2d") // 8bit, zbuffer, compressed, chunked
+	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d") // 8bit, zbuffer, compressed, chunked
 
 	if err != nil {
 		log.Fatal(err)
