@@ -9,14 +9,11 @@ import (
 	"github.com/depy/RevenantRE/graphics"
 	"github.com/depy/RevenantRE/ui"
 	"github.com/ebitenui/ebitenui"
-	"github.com/ebitenui/ebitenui/widget"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
 var img *image.RGBA
 var palette *image.RGBA
-var scaleFactor = 4.0
-var slider *widget.Slider
 
 const (
 	screenWidth  = 1920
@@ -29,18 +26,18 @@ type Game struct {
 }
 
 func (g *Game) Update() error {
-	scaleFactor = 2
 	g.ui.Update()
 	return nil
 }
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Scale(scaleFactor, scaleFactor)
+	op.GeoM.Scale(2, 2)
 	i := ebiten.NewImageFromImage(g.image)
 	screen.DrawImage(i, op)
 
-	op.GeoM.Scale(12, 12)
+	op = &ebiten.DrawImageOptions{}
+	op.GeoM.Scale(24, 24)
 	op.GeoM.Translate(900, 20)
 	p := ebiten.NewImageFromImage(palette)
 	screen.DrawImage(p, op)
@@ -52,6 +49,8 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
+	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Dungeon\\dunalcovee.i2d") // 8bit, zbuffer, compressed, chunked
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\RockPile.i2d") // 8bit, zbuffer, compressed, chunked
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\cavbones1.i2d") // 8bit, zbuffer, compressed, chunked
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\dragonent.i2d") // 8bit, zbuffer, compressed, chunked
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\KeepInt\\kinrug.i2d") // 8bit, zbuffer, compressed, chunked
@@ -64,7 +63,7 @@ func main() {
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\potionblue.i2d") // Works
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d") // Works
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\formushrooms2.i2d") // 8bit, zbuffer, compressed, chunked
-	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d") // 8bit, zbuffer, compressed, chunked
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d") // 8bit, zbuffer, compressed, chunked
 
 	if err != nil {
 		log.Fatal(err)
