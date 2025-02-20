@@ -217,9 +217,11 @@ func NewBitmap(file *os.File, readOnlyHeaders bool) (Bitmap, error) {
 				fmt.Println("Error reading palette data for: ", file.Name())
 				return Bitmap{}, err
 			}
-			if bmFlags.IsChunked {
-				ch := NewChunksHeader(bmapData)
-				fmt.Println(ch)
+			if bmFlags.IsCompressed {
+				chunks := Decompress(&bmapData, bmFlags.IsChunked)
+				bmHeader.Width = chunks.ChunksHeader.Width * CHUNK_WIDTH
+				bmHeader.Height = chunks.ChunksHeader.Height * CHUNK_HEIGHT
+				rgbData = RenderChunkedBitmap8bit(bmHeader, chunks, palette)
 			} else {
 				rgbData = RenderBitmap8bit(bmHeader, bmapData, palette)
 			}
@@ -245,7 +247,6 @@ func RenderBitmap15bit(bmh BitmapHeader, data []byte) []RGBA {
 
 			result[i*bmh.Width+j] = RGBA{pR, pG, pB, pA}
 		}
-
 	}
 	return result
 }
@@ -259,5 +260,28 @@ func RenderBitmap8bit(bmh BitmapHeader, data []byte, palette Palette) []RGBA {
 			result[i*bmh.Width+j] = RGBA{c.R, c.G, c.B, c.A}
 		}
 	}
+	return result
+}
+
+func RenderChunkedBitmap8bit(bmh BitmapHeader, cbd ChunkedBitmapData, palette Palette) []RGBA {
+	size := int(cbd.ChunksHeader.Width) * int(cbd.ChunksHeader.Height) * int(CHUNK_WIDTH) * int(CHUNK_HEIGHT)
+	result := make([]RGBA, size)
+
+	for i := range cbd.Chunks {
+		chunk := cbd.Chunks[i]
+		for k := 0; k < CHUNK_HEIGHT; k++ {
+			for l := 0; l < CHUNK_WIDTH; l++ {
+				xOff := (i % int(cbd.ChunksHeader.Width)) * CHUNK_WIDTH
+				yOff := (i / int(cbd.ChunksHeader.Width)) * CHUNK_HEIGHT
+				ri := k*CHUNK_HEIGHT*int(cbd.ChunksHeader.Width) + yOff*CHUNK_HEIGHT*int(cbd.ChunksHeader.Width) + l + xOff
+
+				dPos := k*64 + l
+				d := chunk.DecompData[dPos]
+				c := palette.Colors[d]
+				result[ri] = RGBA{c.R, c.G, c.B, c.A}
+			}
+		}
+	}
+
 	return result
 }
