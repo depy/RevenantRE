@@ -7,22 +7,25 @@ import (
 	"os"
 
 	"github.com/depy/RevenantRE/graphics"
+	s "github.com/depy/RevenantRE/state"
 	"github.com/depy/RevenantRE/ui"
 	"github.com/ebitenui/ebitenui"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-var img *image.RGBA
-var palette *image.RGBA
+var state *s.State = &s.State{ImageScalingFactor: 1}
 
 const (
 	screenWidth  = 1920
 	screenHeight = 1080
 )
 
+type GameState struct {
+	ImageScalingFactor float64
+}
+
 type Game struct {
-	image *image.RGBA
-	ui    *ebitenui.UI
+	ui *ebitenui.UI
 }
 
 func (g *Game) Update() error {
@@ -32,16 +35,15 @@ func (g *Game) Update() error {
 
 func (g *Game) Draw(screen *ebiten.Image) {
 	op := &ebiten.DrawImageOptions{}
-	op.GeoM.Scale(2, 2)
-	i := ebiten.NewImageFromImage(g.image)
-	screen.DrawImage(i, op)
+	op.GeoM.Scale(state.ImageScalingFactor, state.ImageScalingFactor)
+	screen.DrawImage(state.Image, op)
+
+	g.ui.Draw(screen)
 
 	op = &ebiten.DrawImageOptions{}
-	op.GeoM.Scale(24, 24)
-	op.GeoM.Translate(900, 20)
-	p := ebiten.NewImageFromImage(palette)
-	screen.DrawImage(p, op)
-	g.ui.Draw(screen)
+	op.GeoM.Scale(35, 35)
+	op.GeoM.Translate(1320, 480)
+	screen.DrawImage(state.Palette, op)
 }
 
 func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
@@ -62,8 +64,8 @@ func main() {
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\potionblue.i2d")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d")
 	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\formushrooms2.i2d")
-	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Dungeon\\dunalcovee.i2d") // has weird artifacts
+	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d")
+	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Dungeon\\dunalcovee.i2d") // has weird artifacts
 
 	if err != nil {
 		log.Fatal(err)
@@ -77,7 +79,7 @@ func main() {
 
 	bm := fr.Bitmaps[0]
 
-	img = image.NewRGBA(image.Rect(0, 0, int(bm.Width), int(bm.Height)))
+	img := image.NewRGBA(image.Rect(0, 0, int(bm.Width), int(bm.Height)))
 	for i := 0; i < len(bm.Data); i++ {
 		x := i % int(bm.Width)
 		y := i / int(bm.Width)
@@ -85,7 +87,9 @@ func main() {
 		img.Set(x, y, c)
 	}
 
-	palette = image.NewRGBA(image.Rect(0, 0, 16, 16))
+	eImg := ebiten.NewImageFromImage(img)
+
+	palette := image.NewRGBA(image.Rect(0, 0, 16, 16))
 	for i := 0; i < len(bm.Palette.Colors); i++ {
 		x := i % 16
 		y := i / 16
@@ -93,11 +97,16 @@ func main() {
 		palette.Set(x, y, color.RGBA{c.R, c.G, c.B, c.A})
 	}
 
-	eui := ui.SetupUI(screenWidth, screenHeight)
+	ePalette := ebiten.NewImageFromImage(palette)
+
+	state.Image = eImg
+	state.Palette = ePalette
+
+	eui := ui.SetupUI(screenWidth, screenHeight, state)
 	g := &Game{
-		image: img,
-		ui:    eui,
+		ui: eui,
 	}
+
 	if err := ebiten.RunGame(g); err != nil {
 		log.Fatal(err)
 	}

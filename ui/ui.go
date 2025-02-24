@@ -5,6 +5,7 @@ import (
 	"image/color"
 	"log"
 
+	s "github.com/depy/RevenantRE/state"
 	"github.com/ebitenui/ebitenui"
 	euiimage "github.com/ebitenui/ebitenui/image"
 	"github.com/ebitenui/ebitenui/widget"
@@ -13,11 +14,9 @@ import (
 	"golang.org/x/image/font/gofont/goregular"
 )
 
-func SetupUI(screenWidth int, screenHeight int) *ebitenui.UI {
+func SetupUI(screenWidth int, screenHeight int, state *s.State) *ebitenui.UI {
 	rootContainer := widget.NewContainer(
-		// the container will use an anchor layout to layout its single child widget
 		widget.ContainerOpts.Layout(widget.NewAnchorLayout(
-			//Set how much padding before displaying content
 			widget.AnchorLayoutOpts.Padding(widget.NewInsetsSimple(20)),
 		)),
 	)
@@ -44,9 +43,7 @@ func SetupUI(screenWidth int, screenHeight int) *ebitenui.UI {
 	)
 
 	slider := widget.NewSlider(
-		// Set the slider orientation - n/s vs e/w
 		widget.SliderOpts.Direction(widget.DirectionHorizontal),
-		// Set the minimum and maximum value for the slider
 		widget.SliderOpts.MinMax(1, 12),
 
 		widget.SliderOpts.WidgetOpts(
@@ -58,29 +55,23 @@ func SetupUI(screenWidth int, screenHeight int) *ebitenui.UI {
 		),
 
 		widget.SliderOpts.Images(
-			// Set the track images
 			&widget.SliderTrackImage{
 				Idle:  euiimage.NewNineSliceColor(color.NRGBA{100, 100, 100, 255}),
 				Hover: euiimage.NewNineSliceColor(color.NRGBA{100, 100, 100, 255}),
 			},
-			// Set the handle images
 			&widget.ButtonImage{
 				Idle:    euiimage.NewNineSliceColor(color.NRGBA{255, 100, 100, 255}),
 				Hover:   euiimage.NewNineSliceColor(color.NRGBA{255, 100, 100, 255}),
 				Pressed: euiimage.NewNineSliceColor(color.NRGBA{255, 100, 100, 255}),
 			},
 		),
-		// Set the size of the handle
 		widget.SliderOpts.FixedHandleSize(6),
-		// Set the offset to display the track
 		widget.SliderOpts.TrackOffset(0),
-		// Set the size to move the handle
 		widget.SliderOpts.PageSizeFunc(func() int {
 			return 1
 		}),
-		// Set the callback to call when the slider value is changed
 		widget.SliderOpts.ChangedHandler(func(args *widget.SliderChangedEventArgs) {
-			// fmt.Println(args.Current, "dragging", args.Dragging)
+			state.ImageScalingFactor = float64(args.Current)
 		}),
 	)
 
@@ -98,10 +89,9 @@ func SetupUI(screenWidth int, screenHeight int) *ebitenui.UI {
 		widget.TextOpts.Text("Scaling factor", fontFace, color.White),
 		widget.TextOpts.WidgetOpts(
 			widget.WidgetOpts.LayoutData(widget.GridLayoutData{
-				HorizontalPosition: widget.GridLayoutPositionEnd,
+				HorizontalPosition: widget.GridLayoutPositionStart,
 				VerticalPosition:   widget.GridLayoutPositionStart,
 			}),
-			widget.WidgetOpts.MinSize(280, 25),
 		),
 	)
 
