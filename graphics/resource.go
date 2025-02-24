@@ -9,7 +9,7 @@ import (
 	"github.com/depy/RevenantRE/utils"
 )
 
-const FileResourceHeaderSize = 20
+const FRH_SIZE = 20 // File resource header size
 
 type FileResource struct {
 	Header      FileResourceHeader
@@ -117,7 +117,7 @@ func NewFileResource(file *os.File, readHeadersOnly bool) (FileResource, error) 
 }
 
 func readFileResourceHeader(file *os.File) (FileResourceHeader, error) {
-	fileResHdrData, err := utils.ReadBytes(file, 20)
+	fileResHdrData, err := utils.ReadBytes(file, FRH_SIZE)
 	if err != nil {
 		return FileResourceHeader{}, err
 	}

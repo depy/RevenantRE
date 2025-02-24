@@ -191,10 +191,10 @@ func NewBitmap(file *os.File, readOnlyHeaders bool) (Bitmap, error) {
 	}
 
 	bmHeader := NewBitmapHeader(bmhData)
-	PrintBitmapHeader(&bmHeader)
+	//PrintBitmapHeader(&bmHeader)
 
 	bmFlags := NewBitmapFlags(bmHeader.Flags)
-	PrintBitmapFlags(&bmFlags)
+	//PrintBitmapFlags(&bmFlags)
 
 	rgbData := []RGBA{}
 	palette := Palette{}
@@ -207,10 +207,8 @@ func NewBitmap(file *os.File, readOnlyHeaders bool) (Bitmap, error) {
 		}
 
 		if bmFlags.Is15bit {
-			//fmt.Println("Rendering 15bit bitmap")
 			rgbData = RenderBitmap15bit(bmHeader, bmapData)
 		} else if bmFlags.Is8bit {
-			//fmt.Println("Rendering 8bit bitmap")
 			paletteData, err := utils.ReadBytes(file, 512)
 			palette = NewPalette(paletteData)
 			if err != nil {
@@ -218,7 +216,7 @@ func NewBitmap(file *os.File, readOnlyHeaders bool) (Bitmap, error) {
 				return Bitmap{}, err
 			}
 			if bmFlags.IsCompressed {
-				chunks := Decompress(&bmapData, bmFlags.IsChunked)
+				chunks := Decompress(bmapData, bmFlags.IsChunked)
 				bmHeader.Width = chunks.ChunksHeader.Width * CHUNK_WIDTH
 				bmHeader.Height = chunks.ChunksHeader.Height * CHUNK_HEIGHT
 				rgbData = RenderChunkedBitmap8bit(bmHeader, chunks, palette)
