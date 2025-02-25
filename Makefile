@@ -1,3 +1,2 @@
 all:
 	go build
-	./RevenantRE

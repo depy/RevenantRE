@@ -1,10 +1,12 @@
 package main
 
 import (
+	"flag"
 	"image"
 	"image/color"
 	"log"
 	"os"
+	"path/filepath"
 
 	"github.com/depy/RevenantRE/graphics"
 	s "github.com/depy/RevenantRE/state"
@@ -51,21 +53,20 @@ func (g *Game) Layout(outsideWidth, outsideHeight int) (int, int) {
 }
 
 func main() {
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\RockPile.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Cave\\cavbones1.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\dragonent.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\KeepInt\\kinrug.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\book.dat")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\resources\\scroll.dat")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Equip\\scroll.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\book.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Magic\\death.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\cheese.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\potionblue.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Misc\\bread.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\formushrooms2.i2d")
-	//file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Forest\\forbirch001.i2d")
-	file, err := os.Open("D:\\Games\\RevenantRE\\__1extracted\\imagery\\Imagery\\Dungeon\\dunalcovee.i2d") // has weird artifacts
+	fpath := flag.String("f", "", "Filename to open")
+	flag.Parse()
+
+	if *fpath == "" {
+		println("File path must be specified with -f flag.")
+		println("For example: RevenantRE -f imagery/Imagery/Forest/breaktable.i2d")
+		return
+	}
+
+	if filepath.Ext(*fpath) != ".dat" && filepath.Ext(*fpath) != ".i2d" {
+		println("This program can only open .dat and .i2d files.")
+	}
+
+	file, err := os.Open(*fpath)
 
 	if err != nil {
 		log.Fatal(err)
